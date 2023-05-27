@@ -1,6 +1,4 @@
 import { Edge } from "./interfaces";
-
-
 class Graph {
   private edges: Edge[] = [];
   private vertices: number[] = [];
@@ -16,7 +14,7 @@ class Graph {
     return this.vertices;
   }
 
-  getEdges(): Edge[] {
+  public getEdges(): Edge[] {
     return this.edges;
   }
 
