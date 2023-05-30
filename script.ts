@@ -1,46 +1,74 @@
-import { Edge } from './interfaces';
-import Graph from './Graph';
-import Kruskal from './Kruskal';
-import Grapher from './Grapher';
+import { Edge } from "./interfaces";
+import Graph from "./Graph";
+import Kruskal from "./Kruskal";
+import Grapher from "./Grapher";
 
 declare global {
-    interface Window {
-      Grapher: Grapher
-    }
+  interface Window {
+    Grapher: Grapher;
   }
-
-const basicGraph = [
-  { firstVertex: 1, secondVertex: 5, weight: 1},
-  { firstVertex: 1, secondVertex: 2, weight: 3},
-  { firstVertex: 2, secondVertex: 5, weight: 4},
-  { firstVertex: 2, secondVertex: 3, weight: 5},
-  { firstVertex: 3, secondVertex: 5, weight: 6},
-  { firstVertex: 5, secondVertex: 4, weight: 7},  
-  { firstVertex: 3, secondVertex: 4, weight: 2},
-];
-
-const edges: Edge[] = basicGraph;
-
-const graph = new Graph(edges);
+}
 
 const kruskal = new Kruskal();
 
-const msp = kruskal.findMinimalSpanningTree(graph.getVertices(), graph.getEdges());
+const grapher = new Grapher("#canvas");
+const preview = new Grapher("#preview");
 
-const grapher = new Grapher("#canvas", graph.getVertices().length, msp, graph.getVertices());
-const preview = new Grapher("#preview", graph.getVertices().length, graph.getEdges(), graph.getVertices());
+const addEdge = document.querySelector(".add-edge");
+const edgesWrapper = document.querySelector(".edges");
+const deleteEdge = document.querySelectorAll(".delete");
 
-const input: HTMLTextAreaElement = document.querySelector('.graph-input');
-const inputSubmit = document.querySelector('.graph-submit');
+const createEdge = () => {
+  const edge = document.createElement("div");
+  edge.classList.add("row", "my-2", "single-edge");
+  edge.innerHTML = `
+        <div class="col-12 col-md-3"><input class="form-control" type="number" placeholder="Pierwszy wierzchołek"></div>
+        <div class="col-12 col-md-3"><input class="form-control" type="number" placeholder="Drugi wierzchołek"></div>
+        <div class="col-12 col-md-3"><input class="form-control" type="number" placeholder="Waga krawędzi"></div>
+        <button class="btn btn-danger col-12 col-md-3 delete">X</button>
+    `;
 
-input.value = JSON.stringify(basicGraph);
+  return edge;
+};
 
-inputSubmit.addEventListener('click', function () {
-  const json = JSON.parse(input.value);
-  const graph = new Graph(json);
+deleteEdge.forEach((button) => button.addEventListener('click', () => {
+  button.closest(".single-edge").remove()
+}));
 
+const getEdges = (): Edge[] => {
+  const edges: Edge[] = [];
+
+  edgesWrapper.querySelectorAll(".single-edge").forEach((edge) => {
+    const [firstVertex, secondVertex, weight]: number[] = Array.from(edge.querySelectorAll("input")).map((input) => parseInt(input.value));
+    if (firstVertex == 0 || secondVertex == 0 || weight == 0) return null;
+    if (!firstVertex || !secondVertex || !weight) return null;
+    edges.push({ firstVertex, secondVertex, weight });
+  });
+
+  return edges;
+};
+
+addEdge.addEventListener("click", () => {
+  const edge = createEdge();
+  edgesWrapper.appendChild(edge);
+});
+
+const drawPreviewButton = document.querySelector(".draw-preview");
+const drawMspButton = document.querySelector(".draw-msp");
+
+drawPreviewButton.addEventListener("click", () => {
+  const edges = getEdges();
+  if (!edges) return;
+  const graph = new Graph(edges);
+  preview.newGraph(graph.getEdges(), graph.getVertices());
+});
+
+drawMspButton.addEventListener("click", () => {
+  const edges = getEdges();
+  if (!edges) {
+    alert("Podaj poprawne dane.");
+  }
+  const graph = new Graph(edges);
   const msp = kruskal.findMinimalSpanningTree(graph.getVertices(), graph.getEdges());
-  grapher.newGraph(graph.getVertices().length, msp, graph.getVertices());
-
-  preview.newGraph(graph.getVertices().length, graph.getEdges(), graph.getVertices());
-})
+  grapher.newGraph(msp, graph.getVertices());
+});

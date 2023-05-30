@@ -11,9 +11,9 @@ class Grapher {
   private points: any = [];
   private edges: any = [];
 
-  constructor(selector: string, verticesNumber: number, graph: any[], vertices: number[]) {
+  constructor(selector: string, graph: any[] = [], vertices: number[] = []) {
     this.canvas = document.querySelector(selector);
-    this.verticesNumber = verticesNumber;
+    this.verticesNumber = vertices.length
     this.angleIncrement = 2 * Math.PI / this.verticesNumber;
     this.graph = graph;
     this.vertices = vertices;
@@ -21,8 +21,8 @@ class Grapher {
     this.getRenderingContext();
   }
 
-  public newGraph(verticesNumber: number, graph: any[], vertices: number[]) {
-    this.verticesNumber = verticesNumber;
+  public newGraph(graph: any[], vertices: number[]) {
+    this.verticesNumber = vertices.length;
     this.angleIncrement = 2 * Math.PI / this.verticesNumber;
     this.graph = graph;
     this.points = [];
@@ -37,8 +37,6 @@ class Grapher {
     if (!this.renderingContext) {
       console.log(new Error("Couldnt get rendering context."));
     }
-
-    this.start();
   }
 
   private start() {
@@ -47,14 +45,13 @@ class Grapher {
         this.addVertex(1);
     } catch (err) {
         alert("Błąd w danych.")
-        location.reload();
-    }
+      }
   }
 
   private addVertex(vertexKey: number) {
     if (!this.vertices.includes(vertexKey)) {
-        alert('Graf jest niepoprawny, rozłączny, lub nazwy wierzchołków nie następują po sobie.');
-        throw new Error('Graf jest niepoprawny, rozłączny, lub nazwy wierzchołków nie następują po sobie.');
+      this.clearCanvas();
+      throw new Error('Graf jest niepoprawny, rozłączny, lub nazwy wierzchołków nie następują po sobie.');
     }
     const angle = (vertexKey - 1) * this.angleIncrement;
     const x = 120 * Math.cos(angle) + 300 + Math.random() * 20;
@@ -124,6 +121,13 @@ class Grapher {
     });
 
     window.requestAnimationFrame(this.draw.bind(this));
+  }
+
+  private clearCanvas() {
+    this.renderingContext.clearRect(0, 0, 600, 600);
+    this.renderingContext.fill();
+    this.renderingContext.stroke();
+    this.renderingContext.beginPath();
   }
 }
 

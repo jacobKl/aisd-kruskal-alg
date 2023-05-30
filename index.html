@@ -9,9 +9,7 @@
 </head>
 <body>
     <div class="container-fluid d-flex justify-content-center flex-column align-items-center">
-        <h3 class="">Wizualizacja działania algorytmu Kruskala</h3>
-        <p class="text-muted">Prezentacja działania algorytmu Kruskala, krok po kroku.</p>
-        <div class="d-flex">
+        <div class="d-flex flex-wrap">
             <div>
                 <h5 class="text-center">Podgląd grafu: </h5>
                 <canvas id="preview" width="600" height="400">
@@ -23,16 +21,65 @@
                 </canvas>
             </div>
         </div>
-        
-        <div class="d-flex w-100">
-            <textarea type="text" class="form-control graph-input"></textarea>
-            <div>
-                <input type="submit" class="btn btn-light graph-submit" />
+        <div class="container">
+            <h3>Do poprawnego działania algorytmu wymaga się:</h3>
+            <ol class="m-0 text-muted mb-4">
+                <li>wszystkie wierzchołki muszą być osiągalne od siebie nawzajem</li>
+                <li>wierzchołki muszą następować po sobie [1,2,3...] nie [1,4,10...]</li>
+            </ol>
+            <p class="text-small text-muted">Aby graf pojawił się w podglądzie kliknij przycisk `Narysuj graf`, aby uruchomić algorytm MSP kliknij przycisk `Uruchom algorytm` - drzewo spinające zjawi się w `Podgląd drzewa spinającego`.</p>
+        </div>
+        <div class="container">
+            <div class="btn-group g-1 w-100">
+                <button class="btn-primary btn add-edge">Dodaj krawędź</button>
+                <button class="btn-secondary btn draw-preview">Narysuj graf</button>
+                <button class="btn-light btn draw-msp">Uruchom algorytm</button>
+            </div>
+            <div class="edges my-3">
+                <div class="single-edge row my-2">
+                    <div class="col-12 col-md-3"><input value="1" class="form-control" type="number" placeholder="Pierwszy wierzchołek"></div>
+                    <div class="col-12 col-md-3"><input value="5" class="form-control" type="number" placeholder="Drugi wierzchołek"></div>
+                    <div class="col-12 col-md-3"><input  value="1" class="form-control" type="number" placeholder="Waga krawędzi"></div>
+                    <button class="btn btn-danger col-12 col-md-3 delete">X</button>
+                </div>
+                <div class="single-edge row my-2">
+                    <div class="col-12 col-md-3"><input value="1" class="form-control" type="number" placeholder="Pierwszy wierzchołek"></div>
+                    <div class="col-12 col-md-3"><input value="2" class="form-control" type="number" placeholder="Drugi wierzchołek"></div>
+                    <div class="col-12 col-md-3"><input  value="3" class="form-control" type="number" placeholder="Waga krawędzi"></div>
+                    <button class="btn btn-danger col-12 col-md-3 delete">X</button>
+                </div>
+                <div class="single-edge row my-2">
+                    <div class="col-12 col-md-3"><input value="2" class="form-control" type="number" placeholder="Pierwszy wierzchołek"></div>
+                    <div class="col-12 col-md-3"><input value="5" class="form-control" type="number" placeholder="Drugi wierzchołek"></div>
+                    <div class="col-12 col-md-3"><input  value="4" class="form-control" type="number" placeholder="Waga krawędzi"></div>
+                    <button class="btn btn-danger col-12 col-md-3 delete">X</button>
+                </div>
+                <div class="single-edge row my-2">
+                    <div class="col-12 col-md-3"><input value="2" class="form-control" type="number" placeholder="Pierwszy wierzchołek"></div>
+                    <div class="col-12 col-md-3"><input value="3" class="form-control" type="number" placeholder="Drugi wierzchołek"></div>
+                    <div class="col-12 col-md-3"><input  value="5" class="form-control" type="number" placeholder="Waga krawędzi"></div>
+                    <button class="btn btn-danger col-12 col-md-3 delete">X</button>
+                </div>
+                <div class="single-edge row my-2">
+                    <div class="col-12 col-md-3"><input value="3" class="form-control" type="number" placeholder="Pierwszy wierzchołek"></div>
+                    <div class="col-12 col-md-3"><input value="5" class="form-control" type="number" placeholder="Drugi wierzchołek"></div>
+                    <div class="col-12 col-md-3"><input  value="6" class="form-control" type="number" placeholder="Waga krawędzi"></div>
+                    <button class="btn btn-danger col-12 col-md-3 delete">X</button>
+                </div>
+                <div class="single-edge row my-2">
+                    <div class="col-12 col-md-3"><input value="5" class="form-control" type="number" placeholder="Pierwszy wierzchołek"></div>
+                    <div class="col-12 col-md-3"><input value="4" class="form-control" type="number" placeholder="Drugi wierzchołek"></div>
+                    <div class="col-12 col-md-3"><input  value="7" class="form-control" type="number" placeholder="Waga krawędzi"></div>
+                    <button class="btn btn-danger col-12 col-md-3 delete">X</button>
+                </div>
+                <div class="single-edge row my-2">
+                    <div class="col-12 col-md-3"><input value="3" class="form-control" type="number" placeholder="Pierwszy wierzchołek"></div>
+                    <div class="col-12 col-md-3"><input value="4" class="form-control" type="number" placeholder="Drugi wierzchołek"></div>
+                    <div class="col-12 col-md-3"><input  value="2" class="form-control" type="number" placeholder="Waga krawędzi"></div>
+                    <button class="btn btn-danger col-12 col-md-3 delete">X</button>
+                </div>
             </div>
         </div>
-        <p class="text-muted">
-            Proszę o podanie grafu w formacie JSON na podobieństwo wpisanego grafu.
-        </p>
         <h6>Algorytm Kruskala pozwala na uzyskanie <a href="https://pl.wikipedia.org/wiki/Minimalne_drzewo_rozpinające">Minimalnego drzewa spinającego</a> grafu.</h6>
         <p class="text-center text-muted">
             Projekt nr III na przedmiot Algorytmy i Struktury Danych - Autor: Jakub Klimek
